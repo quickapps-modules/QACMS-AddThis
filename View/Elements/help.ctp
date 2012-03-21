@@ -26,7 +26,7 @@
     <dd>
         <br />
         <code>
-            [add_this url='/url/to/share' title='Title of the content being shared' style={1..9}]
+            [add_this url='/url/to/share' title='Title of the content being shared' style={1..9} custom_selection=true|false]
         </code>
     </dd>
 
@@ -34,6 +34,6 @@
     <dd>
         Through the <?php echo $this->Html->link('settings', '/admin/system/modules/settings/AddThis'); ?> panel you
         can choose to automatically display an <em>AddThis</em> button only for specific content types or specific user roles.
-        
+        You will be able to add your Profile ID for analytics purpose and have a custom selection of the social bookmars shown.
     </dd>
 </dl>

@@ -26,7 +26,7 @@
     <dd>
         <br />
         <code>
-            [add_this url='/url/to/share' title='Title of the content being shared' style={1..9} custom_selection=true|false]
+            [add_this url='/url/to/share' title='Title of the content being shared' style={1..9} custom_selection='facebook, twitter, google_plusone...']
         </code>
     </dd>
 

@@ -93,31 +93,18 @@
     </div>
 <?php echo $this->Html->useTag('fieldsetend'); ?>
 
-<?php echo $this->Html->useTag('fieldsetstart', '<span class="fieldset-toggle">' . __d('add_this', 'Custom bookmarks selection') . '</span>'); ?>
+<?php echo $this->Html->useTag('fieldsetstart', '<span class="fieldset-toggle">' . __d('add_this', 'Custom bookmarks selection:') . '</span>'); ?>
     <div class="fieldset-toggle-container" style="<?php echo (isset($this->data['Module']['settings']['custom_selection']) && $this->data['Module']['settings']['custom_selection'] != 0) ? '' : 'display:none;'; ?>">
-		<p><?php echo __d('add_this', 'If one or more of these choises are selected the previous style selections will be ignored'); ?></p>
+		<p><?php echo __d('add_this', 'If at least one custom bookmark has inserted the previous template style selections will be ignored. It will be preserved the eventual choice for big or small icons.
+						  <br/>Note that if you want bookmarks on top or/and on the bottom of the node select an item different than <strong><em>None</em></strong>.'); ?></p>
+		<p><?php echo __d('add_this', 'Possible values:<br/>
+						  facebook, facebook_like, facebook_send, twitter, tweet, twitter_follow_native, google, google_plusone, google_plusone_badge,
+						  pinterst, foursquare, addthis_button, addthis_button_compact, amazonwishlist, email.'); ?></p>
         <?php
             echo $this->Form->input('Module.settings.custom_selection',
                 array(
-                    'type' => 'select',
-                    'multiple' => 'checkbox',
-                    'options' => array(
-                        'addthis_button_facebook' => 'Facebook',//$this->Html->image('AddThis.toolbox-small.png'),
-                        'addthis_button_facebook_like' => 'Facebook Like',
-                        'addthis_button_facebook_send' => 'Facebook Send',
-                        'addthis_button_twitter' => 'Twitter',
-                        'addthis_button_tweet' => 'Tweet',
-                        'addthis_button_twitter_follow_native' => 'Twitter Follow Native',
-                        'addthis_button_google' => 'Google',
-                        'addthis_button_google_plusone' => 'Google +1',
-                        'addthis_button_google_plusone_badge' => 'Google +1 Badge',
-                        'addthis_button_pinterest' => 'Pinterest',
-                        'addthis_button_foursquare' => 'Foursquare',
-                        'addthis_button_button' => 'AddThis Button',
-                        'addthis_button_button_compact' => 'AddThis Button Compact',
-                        'addthis_button_amazonwishlist' => 'Amazon Wishlist',
-                        'addthis_button_email' => 'Email'
-                    )
+					'label' => __d('add_this', 'Insert a comma separated list'),
+                    'type' => 'text'
                 )
             );
         ?>

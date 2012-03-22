@@ -19,15 +19,21 @@ class AddThisHooktagsHelper extends AppHelper {
         $title = $attr['title'] ? "addthis:title='" . __t($attr['title']) . "' " : '';
         $pubid = Configure::read('Modules.AddThis.settings.pubid');
         $u = $pubid ? "&amp;pubid={$attr['pubid']}" : '';
-        $cs = (array)Configure::read('Modules.AddThis.settings.custom_selection');
         
         // If there is a custom selection
-        if ($attr['custom_selection'] && $attr['custom_selection'] == 'true' && $cs) {
+        if ($attr['custom_selection']) {
+			$class = $attr['style'] == 2 ? 'addthis_32x32_style' : '';
             $out .= '
                     <!-- AddThis Button BEGIN -->
-                    <div class="addthis_toolbox addthis_default_style ' . $url . $title .'>';
-            foreach ($cs as $key => $value) {
-                $out .= '    <a class="'.$value.'"></a>';
+                    <div class="addthis_toolbox addthis_default_style ' . $class . '" ' . $url . $title .'>';
+            foreach (explode(',', $attr['custom_selection']) as $key => $value) {
+				$value = trim($value);
+				if ($value) {
+					if (substr($value,0,strlen('addthis_button')) != 'addthis_button') {
+						$value = 'addthis_button_'.$value;
+					}
+					$out .= '    <a class="'.$value.'"></a>';
+				}
             }
             $out .= '</div>
                     <!-- AddThis Button END -->

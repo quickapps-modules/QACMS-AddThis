@@ -10,11 +10,9 @@ class AddThisHookHelper extends AppHelper {
             foreach ((array)QuickApps::userRoles() as $r) {
                 if (in_array($r, $ur)) {
                     $in = true;
-
                     break;
                 }
             }
-
             $this->__tmp['allowed_user'] = in_array(0, $ur) || empty($ur) || $in;
         } else {
             $this->__tmp['allowed_user'] = false;
@@ -23,31 +21,34 @@ class AddThisHookHelper extends AppHelper {
 
     public function before_render_node($node) {
         $nt = (array)Configure::read('Modules.AddThis.settings.node_types');
+        $cs = Configure::read('Modules.AddThis.settings.custom_selection');
 
         if ($this->__tmp['allowed_user'] &&
-            (in_array(0, $nt) || !$nt || in_array($node['Node']['node_type_id'], $nt))
+            (in_array('ANY', $nt) || !$nt || in_array($node['Node']['node_type_id'], $nt))
         ) {
             if ($n = Configure::read('Modules.AddThis.settings.above_node')) {
-                return $this->__addThis($node, $n);
+                return $this->__addThis($node, $n, $cs);
             }
         }
     }
 
     public function after_render_node($node) {
         $nt = (array)Configure::read('Modules.AddThis.settings.node_types');
+        $cs = Configure::read('Modules.AddThis.settings.custom_selection');
 
         if ($this->__tmp['allowed_user'] &&
-            (in_array(0, $nt) || !$nt || in_array($node['Node']['node_type_id'], $nt))
+            (in_array('ANY', $nt) || !$nt || in_array($node['Node']['node_type_id'], $nt))
         ) {
             if ($n = Configure::read('Modules.AddThis.settings.below_node')) {
-                return $this->__addThis($node, $n);
+                return $this->__addThis($node, $n, $cs);
             }
         }
     }
 
-    private function __addThis($node, $style) {
+    private function __addThis($node, $style, $custom_selection) {
         $ht = "[add_this 
             style={$style}
+            custom_selection='{$custom_selection}'
             url='" . Router::url("/{$node['Node']['node_type_id']}/{$node['Node']['slug']}.html", true) . "'
             title='{$node['Node']['title']}'
         /]";

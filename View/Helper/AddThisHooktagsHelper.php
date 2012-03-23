@@ -7,59 +7,58 @@ class AddThisHooktagsHelper extends AppHelper {
         $attr = array_merge(
             array(
                 'style' => 1,
-                'custom_selection' => false,
+                'services' => false,
                 'url' => false,
                 'title' => false,
-                'pubid' => false
+                'pubid' => Configure::read('Modules.AddThis.settings.pubid'),
+                'size' => 16,
+                'more' => 'yes'
             ),
             (array)$attr
         );
 
         $url = $attr['url'] ? "addthis:url='" . Router::url($attr['url'], true) . "' " : '';
         $title = $attr['title'] ? "addthis:title='" . __t($attr['title']) . "' " : '';
-        $pubid = Configure::read('Modules.AddThis.settings.pubid');
-        $u = $pubid ? "&amp;pubid={$attr['pubid']}" : '';
-        
-        // If there is a custom selection
-        if ($attr['custom_selection']) {
-			$class = $attr['style'] == 2 ? 'addthis_32x32_style' : '';
-            $out .= '
-                    <!-- AddThis Button BEGIN -->
-                    <div class="addthis_toolbox addthis_default_style ' . $class . '" ' . $url . $title .'>';
-            foreach (explode(',', $attr['custom_selection']) as $key => $value) {
-				$value = trim($value);
-				if ($value) {
-					if (substr($value,0,strlen('addthis_button')) != 'addthis_button') {
-						$value = 'addthis_button_'.$value;
-					}
-					$out .= '    <a class="'.$value.'"></a>';
-				}
-            }
-            $out .= '</div>
-                    <!-- AddThis Button END -->
-                ';
-        }
-        else {
+        $u = $attr['pubid'] ? "&amp;pubid={$attr['pubid']}" : '';
+        $attr['size'] = is_numeric($attr['size']) ? "{$attr['size']}x{$attr['size']}": $attr['size'];
+        $attr['more'] = in_array($attr['more'], array(0, 'no', 'false'), true) ? false : true;
 
+        if ($attr['services']) {
+            $attr['services'] = preg_replace('/[^A-Za-z0-9,]/', '', $attr['services']);
+            $attr['services'] = explode(',', $attr['services']);
+            $out .= '<!-- AddThis Button BEGIN -->';
+            $out .= '<div class="addthis_toolbox addthis_default_style addthis_' . $attr['size'] . '_style" ' . $url . $title .'>';
+
+            foreach ((array)$attr['services'] as $service) {
+                $out .= '<a class="addthis_button_' . $service . '"></a>';
+            }
+
+            if ($attr['more']) {
+                $out .= '<a class="addthis_button_compact"></a>';
+            }
+
+            $out .= '</div>';
+            $out .= '<!-- AddThis Button END -->';
+        } else {
             switch ($attr['style']) {
                 case 1:
-                case 2:
-                default:
-                    $class = $attr['style'] == 2 ? 'addthis_32x32_style' : '';
-                    $out .= '
-                        <!-- AddThis Button BEGIN -->
-                        <div class="addthis_toolbox addthis_default_style ' . $class . '" ' . $url . $title .'>
-                            <a class="addthis_button_preferred_1"></a>
-                            <a class="addthis_button_preferred_2"></a>
-                            <a class="addthis_button_preferred_3"></a>
-                            <a class="addthis_button_preferred_4"></a>
-                            <a class="addthis_button_compact"></a>
-                            <a class="addthis_counter addthis_bubble_style"></a>
-                        </div>
-                        <!-- AddThis Button END -->
-                    ';
+                    case 2:
+                        default:
+                            $class = $attr['style'] == 2 ? 'addthis_32x32_style' : '';
+                            $out .= '
+                                <!-- AddThis Button BEGIN -->
+                                <div class="addthis_toolbox addthis_default_style ' . $class . '" ' . $url . $title .'>
+                                    <a class="addthis_button_preferred_1"></a>
+                                    <a class="addthis_button_preferred_2"></a>
+                                    <a class="addthis_button_preferred_3"></a>
+                                    <a class="addthis_button_preferred_4"></a>
+                                    <a class="addthis_button_compact"></a>
+                                    <a class="addthis_counter addthis_bubble_style"></a>
+                                </div>
+                                <!-- AddThis Button END -->
+                            ';
                 break;
-    
+
                 case 3:
                     $out .= '
                         <!-- AddThis Button BEGIN -->
@@ -72,7 +71,7 @@ class AddThisHooktagsHelper extends AppHelper {
                         <!-- AddThis Button END -->
                     ';
                 break;
-    
+
                 case 4:
                     $out .= '
                         <!-- AddThis Button BEGIN -->
@@ -87,7 +86,7 @@ class AddThisHooktagsHelper extends AppHelper {
                         <!-- AddThis Button END -->
                     ';
                 break;
-    
+
                 case 5:
                     $out .= '
                         <!-- AddThis Button BEGIN -->
@@ -97,7 +96,7 @@ class AddThisHooktagsHelper extends AppHelper {
                         <!-- AddThis Button END -->
                     ';
                 break;
-    
+
                 case 6:
                     $out .= '
                         <!-- AddThis Button BEGIN -->
@@ -107,7 +106,7 @@ class AddThisHooktagsHelper extends AppHelper {
                         <!-- AddThis Button END -->
                     ';
                 break;
-    
+
                 case 7:
                     $out .= '
                         <!-- AddThis Button BEGIN -->
@@ -117,7 +116,7 @@ class AddThisHooktagsHelper extends AppHelper {
                         <!-- AddThis Button END -->
                     ';
                 break;
-    
+
                 case 8:
                     $out .= '
                         <!-- AddThis Button BEGIN -->
@@ -125,8 +124,8 @@ class AddThisHooktagsHelper extends AppHelper {
                             <a href="http://www.addthis.com/bookmark.php?v=250' . $u . '" class="addthis_button_compact">' . __d('add_this', 'Share') . '</a>
                         </div>
                     ';
-                break;            
-    
+                break;
+
                 case 9:
                     $out .= '
                         <!-- AddThis Button BEGIN -->
@@ -140,7 +139,7 @@ class AddThisHooktagsHelper extends AppHelper {
         }
 
         if (!$this->__addThisCount) {
-            $u = $pubid ? "#pubid={$pubid}" : '';
+            $u = $attr['pubid'] ? "#pubid={$attr['pubid']}" : '';
             $out .= '
                 <script>var addthis_config = {"data_track_clickback":true,"data_track_addressbar":false};if (typeof(addthis_share) == "undefined"){ addthis_share = [];}</script>
                 <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js' . $u . '"></script>

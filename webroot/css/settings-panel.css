@@ -1,0 +1,3 @@
+div.above-custom-settings, div.below-custom-settings { display:none; }
+.custom-settings { padding-left:20px; }
+.custom-settings label { padding:0 5px 0 0 !important; }

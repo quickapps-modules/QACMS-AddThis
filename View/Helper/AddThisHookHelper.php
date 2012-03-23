@@ -13,6 +13,7 @@ class AddThisHookHelper extends AppHelper {
                     break;
                 }
             }
+
             $this->__tmp['allowed_user'] = in_array(0, $ur) || empty($ur) || $in;
         } else {
             $this->__tmp['allowed_user'] = false;
@@ -26,8 +27,8 @@ class AddThisHookHelper extends AppHelper {
         if ($this->__tmp['allowed_user'] &&
             (in_array('ANY', $nt) || !$nt || in_array($node['Node']['node_type_id'], $nt))
         ) {
-            if ($n = Configure::read('Modules.AddThis.settings.above_node')) {
-                return $this->__addThis($node, $n, $cs);
+            if (Configure::read('Modules.AddThis.settings.above_node.style')) {
+                return $this->__addThis($node, 'above');
             }
         }
     }
@@ -39,19 +40,40 @@ class AddThisHookHelper extends AppHelper {
         if ($this->__tmp['allowed_user'] &&
             (in_array('ANY', $nt) || !$nt || in_array($node['Node']['node_type_id'], $nt))
         ) {
-            if ($n = Configure::read('Modules.AddThis.settings.below_node')) {
-                return $this->__addThis($node, $n, $cs);
+            if (Configure::read('Modules.AddThis.settings.below_node.style')) {
+                return $this->__addThis($node, 'below');
             }
         }
     }
 
-    private function __addThis($node, $style, $custom_selection) {
-        $ht = "[add_this 
-            style={$style}
-            custom_selection='{$custom_selection}'
-            url='" . Router::url("/{$node['Node']['node_type_id']}/{$node['Node']['slug']}.html", true) . "'
-            title='{$node['Node']['title']}'
-        /]";
+    private function __addThis($node, $where) {
+        $ht = "[add_this ";
+
+        switch (Configure::read("Modules.AddThis.settings.{$where}_node.style")) {
+            case 'custom':
+                if ($size = Configure::read("Modules.AddThis.settings.{$where}_node.custom_size")) {
+                    $ht .= "size={$size} ";
+                }
+
+                if ($services = Configure::read("Modules.AddThis.settings.{$where}_node.custom_services")) {
+                    $ht .= "services='{$services}' ";
+                }
+
+                if ($more = Configure::read("Modules.AddThis.settings.{$where}_node.custom_more")) {
+                    $ht .= "more=yes ";
+                } else {
+                    $ht .= "more=no ";
+                }
+            break;
+
+            default:
+                $ht .= 'style=' . Configure::read("Modules.AddThis.settings.{$where}_node.style") . ' ';
+            break;
+        }
+
+        $ht .= "title='{$node['Node']['title']}' ";
+        $ht .= "url='" . Router::url("/{$node['Node']['node_type_id']}/{$node['Node']['slug']}.html", true) . "' ";
+        $ht .= " /]";
 
         return $this->hooktags($ht);
     }

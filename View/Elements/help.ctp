@@ -25,9 +25,18 @@
     <dt>Hooktag</dt>
     <dd>
         <br />
-        <code>
-            [add_this url='/url/to/share' title='Title of the content being shared' style={1..9} custom_selection='facebook, twitter, google_plusone...']
-        </code>
+<pre>
+[add_this
+    url='/url/to/share'
+    title='Title of the content being shared' style={1..9}
+
+    services='facebook,twitter,google_plusone,...'
+    size={16,32}
+    more={yes,no}
+/]
+</pre>
+        The attributes "size" and "more" are valid only when "services" attribute is set.
+        <p><a href="http://www.addthis.com/services/list" target="_blank">Click here for a complete service codes list.</a></p>
     </dd>
 
     <dt>Automatic</dt>

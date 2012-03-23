@@ -24,7 +24,7 @@ class AddThisHooktagsHelper extends AppHelper {
         $attr['more'] = in_array($attr['more'], array(0, 'no', 'false'), true) ? false : true;
 
         if ($attr['services']) {
-            $attr['services'] = preg_replace('/[^A-Za-z0-9,]/', '', $attr['services']);
+            $attr['services'] = preg_replace('/[^A-Za-z0-9,_]/', '', $attr['services']);
             $attr['services'] = explode(',', $attr['services']);
             $out .= '<!-- AddThis Button BEGIN -->';
             $out .= '<div class="addthis_toolbox addthis_default_style addthis_' . $attr['size'] . '_style" ' . $url . $title .'>';

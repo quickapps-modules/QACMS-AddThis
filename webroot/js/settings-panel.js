@@ -13,7 +13,7 @@ $(document).ready(function() {
     $('#ModuleSettingsBelowNodeStyleCustom').next().after($('div.below-custom-settings').html());
     $('div.below-custom-settings').remove();
 
-    $('div.above-fieldset div.radio input').click(function() {
+    $('div.above-fieldset div.radio input:radio').click(function() {
         if ($(this).val() != 'custom') {
             $('#above-custom-settings').hide();
         } else {
@@ -21,7 +21,7 @@ $(document).ready(function() {
         }
     });
 
-    $('div.below-fieldset div.radio input').click(function() {
+    $('div.below-fieldset div.radio input:radio').click(function() {
         if ($(this).val() != 'custom') {
             $('#below-custom-settings').hide();
         } else {

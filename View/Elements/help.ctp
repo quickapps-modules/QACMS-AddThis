@@ -28,7 +28,8 @@
 <pre>
 [add_this
     url='/url/to/share'
-    title='Title of the content being shared' style={1..9}
+    title='Title of the content being shared'
+    style={1..9}
 
     services='facebook,twitter,google_plusone,...'
     size={16,32}
@@ -36,6 +37,7 @@
 /]
 </pre>
         The attributes "size" and "more" are valid only when "services" attribute is set.
+        The "style" attribute will be ignored if "services" is set.
         <p><a href="http://www.addthis.com/services/list" target="_blank">Click here for a complete service codes list.</a></p>
     </dd>
 
